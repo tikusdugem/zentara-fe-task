@@ -1,3 +1,6 @@
+"use client";
+
+import "@ant-design/v5-patch-for-react-19";
 import Image from "next/image";
 import styles from "./page.module.css";
 
