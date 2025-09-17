@@ -13,7 +13,7 @@ import { THREAT_LEVEL, THREAT_TYPES } from "@/constants";
 import { getRandomItems, getRandomTimestamp } from "@/utils";
 
 import CountryCard from "@/components/CountryCard";
-import { Flex, message, Select, Spin } from "antd";
+import { Flex, Form, message, Select, Spin } from "antd";
 
 const TREVORBLADES_API_URL = process.env.NEXT_PUBLIC_TREVORBLADES_API_URL;
 
@@ -103,15 +103,17 @@ export default function Home() {
       <Flex justify="center">
         <div style={{ width: "100%", maxWidth: 1440, padding: 16 }}>
           <Flex vertical gap="middle">
-            <Select
-              mode="multiple"
-              allowClear
-              style={{ width: 288 }}
-              placeholder="Select Country"
-              options={countryList}
-              maxCount={5}
-              onChange={(value) => dispatch(setSelectedCountry(value))}
-            />
+            <Form.Item help="Max 5 Country">
+              <Select
+                mode="multiple"
+                allowClear
+                style={{ width: 288 }}
+                placeholder="Select Country"
+                options={countryList}
+                maxCount={5}
+                onChange={(value) => dispatch(setSelectedCountry(value))}
+              />
+            </Form.Item>
 
             <Flex wrap gap="small" justify="center">
               {selectedCountry.map((country, index) => (
