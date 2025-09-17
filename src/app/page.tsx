@@ -4,6 +4,10 @@ import "@ant-design/v5-patch-for-react-19";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "@/libs/store";
+import { setSelectedCountry, setCountry } from "@/libs/slices/countriesSlices";
+
 import { Country } from "@/types/index";
 import { THREAT_LEVEL, THREAT_TYPES } from "@/constants";
 import { getRandomItems, getRandomTimestamp } from "@/utils";
@@ -14,10 +18,12 @@ import { Flex, message, Select, Spin } from "antd";
 const TREVORBLADES_API_URL = process.env.NEXT_PUBLIC_TREVORBLADES_API_URL;
 
 export default function Home() {
-  const [messageApi, contextHolder] = message.useMessage();
+  const { countryList, selectedCountry } = useSelector(
+    (state: RootState) => state.countries
+  );
+  const dispatch = useDispatch();
 
-  const [selectedCountries, setSelectedCountries] = useState<Country[]>([]);
-  const [countries, setCountries] = useState<Country[]>([]);
+  const [messageApi, contextHolder] = message.useMessage();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const getCountries = async () => {
@@ -71,7 +77,7 @@ export default function Home() {
         value: country.name,
       }));
 
-      setCountries(mockCountries);
+      dispatch(setCountry(mockCountries));
     } catch (error) {
       messageApi.open({
         type: "error",
@@ -102,15 +108,13 @@ export default function Home() {
               allowClear
               style={{ width: 288 }}
               placeholder="Select Country"
-              options={countries}
+              options={countryList}
               maxCount={5}
-              onChange={(_, options) =>
-                setSelectedCountries(options as Country[])
-              }
+              onChange={(value) => dispatch(setSelectedCountry(value))}
             />
 
             <Flex wrap gap="small" justify="center">
-              {selectedCountries.map((country, index) => (
+              {selectedCountry.map((country, index) => (
                 <CountryCard key={index} country={country} />
               ))}
             </Flex>
