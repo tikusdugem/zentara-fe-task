@@ -1,118 +1,119 @@
 "use client";
 
 import "@ant-design/v5-patch-for-react-19";
-import { JSX, useState } from "react";
+import { useEffect, useState } from "react";
+import dayjs from "dayjs";
 
-import { Card, Flex, Select, Typography } from "antd";
-const { Text } = Typography;
+import { Country } from "@/types/index";
+import { THREAT_LEVEL, THREAT_TYPES } from "@/constants";
+import { getRandomItems, getRandomTimestamp } from "@/utils";
+
+import CountryCard from "@/components/CountryCard";
+import { Flex, message, Select, Spin } from "antd";
+
+const TREVORBLADES_API_URL = process.env.NEXT_PUBLIC_TREVORBLADES_API_URL;
 
 export default function Home() {
-  const [activeTabKey, setActiveTabKey] = useState("general");
-  const countryOpt = [
-    {
-      label: "Indonesia",
-      value: "indonesia",
-    },
-    {
-      label: "Japan",
-      value: "japan",
-    },
-    {
-      label: "Australia",
-      value: "australia",
-    },
-  ];
+  const [messageApi, contextHolder] = message.useMessage();
 
-  const tabList = [
-    {
-      key: "general",
-      label: "General",
-    },
-    {
-      key: "threats",
-      label: "Threats",
-    },
-  ];
+  const [selectedCountries, setSelectedCountries] = useState<Country[]>([]);
+  const [countries, setCountries] = useState<Country[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const cardContents: Record<string, JSX.Element> = {
-    general: (
-      <>
-        <Flex justify="space-between">
-          <Text type="secondary">AWS Region</Text>
-          <Text>eu-south-1</Text>
-        </Flex>
-        <Flex justify="space-between">
-          <Text type="secondary">Phone</Text>
-          <Text>376</Text>
-        </Flex>
-        <Flex justify="space-between">
-          <Text type="secondary">Currency</Text>
-          <Text>EUR</Text>
-        </Flex>
-        <Flex justify="space-between">
-          <Text type="secondary">Native</Text>
-          <Text>Andorra</Text>
-        </Flex>
-        <Flex justify="space-between">
-          <Text type="secondary">Capital</Text>
-          <Text>Andorra La Vella</Text>
-        </Flex>
-      </>
-    ),
-    threats: (
-      <>
-        <Flex justify="space-between">
-          <Text type="secondary">Level</Text>
-          <Text>Andorra La Vella</Text>
-        </Flex>
-        <Flex justify="space-between">
-          <Text type="secondary">Type</Text>
-          <Text>Andorra La Vella</Text>
-        </Flex>
-        <Flex justify="space-between">
-          <Text type="secondary">Descriptions</Text>
-          <Text>Andorra La Vella</Text>
-        </Flex>
-        <Flex justify="space-between">
-          <Text type="secondary">Timestamp</Text>
-          <Text>Andorra La Vella</Text>
-        </Flex>
-      </>
-    ),
+  const getCountries = async () => {
+    setIsLoading(true);
+
+    try {
+      const res = await fetch(TREVORBLADES_API_URL as string, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          query: `
+            {
+              countries {
+                code
+                name
+                emoji
+                awsRegion
+                native
+                phone
+                currency
+                capital
+              }
+            }
+          `,
+        }),
+      });
+
+      if (!res.ok) throw new Error(`Error Status: ${res.status}`);
+
+      const { data }: { data: { countries: Country[] } } = await res.json();
+      const mockCountries: Country[] = data.countries.map((country) => ({
+        ...country,
+
+        // Mock Threats
+        threats: {
+          level: getRandomItems(THREAT_LEVEL),
+          type: getRandomItems(THREAT_TYPES),
+          timestamps: dayjs(getRandomTimestamp()).format(
+            "DD-MM-YYYY, HH:mm:ss"
+          ),
+          descriptions: `Suspicious ${
+            Math.random() < 0.5 ? "activity" : "incident"
+          }`,
+        },
+
+        // Select Options Needs
+        label: country.name,
+        value: country.name,
+      }));
+
+      setCountries(mockCountries);
+    } catch (error) {
+      messageApi.open({
+        type: "error",
+        content: "Error Get Countries",
+      });
+
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  return (
-    <Flex justify="center">
-      <div style={{ width: "100%", maxWidth: 1440, padding: 16 }}>
-        <Flex vertical gap="middle">
-          <Select
-            mode="multiple"
-            allowClear
-            style={{ width: 288 }}
-            placeholder="Select Country"
-            options={countryOpt}
-            maxCount={5}
-          />
+  useEffect(() => {
+    getCountries();
+  }, []);
 
-          <Flex wrap gap="small">
-            <Card
-              title="Indonesia"
-              extra="🇦🇩 - ID"
-              style={{
-                width: 288,
-                boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-              }}
-              tabList={tabList}
-              activeTabKey={activeTabKey}
-              onTabChange={(key) => setActiveTabKey(key)}
-            >
-              <Flex gap="small" vertical>
-                {cardContents[activeTabKey]}
-              </Flex>
-            </Card>
+  return (
+    <>
+      {contextHolder}
+
+      <Spin spinning={isLoading} fullscreen />
+
+      <Flex justify="center">
+        <div style={{ width: "100%", maxWidth: 1440, padding: 16 }}>
+          <Flex vertical gap="middle">
+            <Select
+              mode="multiple"
+              allowClear
+              style={{ width: 288 }}
+              placeholder="Select Country"
+              options={countries}
+              maxCount={5}
+              onChange={(_, options) =>
+                setSelectedCountries(options as Country[])
+              }
+            />
+
+            <Flex wrap gap="small">
+              {selectedCountries.map((country, index) => (
+                <CountryCard key={index} country={country} />
+              ))}
+            </Flex>
           </Flex>
-        </Flex>
-      </div>
-    </Flex>
+        </div>
+      </Flex>
+    </>
   );
 }

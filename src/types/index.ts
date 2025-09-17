@@ -1,3 +1,5 @@
+import { THREAT_LEVEL, THREAT_TYPES } from "@/constants";
+
 export type Country = {
   code: string;
   name: string;
@@ -11,8 +13,11 @@ export type Country = {
 };
 
 type Threats = {
-  type: "Malware" | "Phishing" | "DDoS" | "Data Breach";
-  level: "Low" | "Medium" | "High" | "Critical";
+  type: ThreatType;
+  level: ThreatLevel;
   timestamps: string;
   descriptions: string;
 };
+
+type ThreatLevel = (typeof THREAT_LEVEL)[number];
+type ThreatType = (typeof THREAT_TYPES)[number];
