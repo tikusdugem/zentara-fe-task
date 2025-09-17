@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# How to play?
 
-## Getting Started
+This project is intended for Technical Assessment, so give me feedback <3
 
-First, run the development server:
+## Development
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Clone this repo and move to the directory
+  ```
+  git clone git@github.com:tikusdugem/zentara-fe-task.git
+  cd zentara-fe-task
+  ```
+- Install Dependencies
+  ```
+  npm install
+  ```
+- Setup ENV
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+  Create `.env` file on the root directory, then ask the developer to giving you the list of environment OR for this time, you can just fill the `.env` file with this :D
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+  ```
+  NEXT_PUBLIC_TREVORBLADES_API_URL=https://countries.trevorblades.com
+  ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Play the Game
+  ```
+  npm run dev
+  ```
 
-## Learn More
+## Deployment
 
-To learn more about Next.js, take a look at the following resources:
+For now this repository only have `main` branch. Every you push the code from `main` branch, Vercel will deploy.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Soon, we can try Git Flow or Trunk Based strategy.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Stacks
 
-## Deploy on Vercel
+- ReactJS
+- NextJS
+- Ant Design
+- Redux
+- ChartJS
+- DayJS
+- Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Reasoning
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+ReactJS & Redux for Requirements.
+
+Vercel recommended on Requirements. So I choose NextJS because maintained by Vercel (zero-configuration for deploying), hope smooth in deployment.
+
+Ant Design for rich components and easy to customize also make faster development.
+
+ChartJS for good SEO :D. Popular in Github Star also can integrate with ReactJS.
+
+DayJS for date formating. Tiny size, modular & straightforward documentation.
+
+# TODO
+
+- Realtime Threat Level (socket.io)
+- Country Comparison Table
+- Change Fetch with GraphQL Client?
+- AI-Powered Threat Analysis
+- Setup Branch: staging, uat, production, feature-branch
+- Changelog (automation)
+- Component Architecture
+- API Documentation (proxy API)
+- Video Walkthrough
+- Technical Documentation (RFC)
