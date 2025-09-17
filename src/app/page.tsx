@@ -61,6 +61,9 @@ export default function Home() {
           descriptions: `Suspicious ${
             Math.random() < 0.5 ? "activity" : "incident"
           }`,
+          comparison: THREAT_TYPES.map(
+            () => Math.floor(Math.random() * 100) + 1
+          ),
         },
 
         // Select Options Needs
@@ -106,7 +109,7 @@ export default function Home() {
               }
             />
 
-            <Flex wrap gap="small">
+            <Flex wrap gap="small" justify="center">
               {selectedCountries.map((country, index) => (
                 <CountryCard key={index} country={country} />
               ))}

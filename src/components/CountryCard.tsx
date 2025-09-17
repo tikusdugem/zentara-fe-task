@@ -1,8 +1,13 @@
 import { type JSX, useState } from "react";
+
 import CountryTabInfo from "@/components/CountryTabInfo";
 import { Card, Flex } from "antd";
 
-import { TAB_LIST } from "@/constants/index";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Pie } from "react-chartjs-2";
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+import { TAB_LIST, THREAT_TYPES } from "@/constants/index";
 import { Country } from "@/types/index";
 
 interface ICountryProps {
@@ -34,6 +39,28 @@ const CountryCard = ({ country }: ICountryProps) => {
         <CountryTabInfo label="Timestamp" value={country.threats.timestamps} />
       </>
     ),
+    visualization: (
+      <>
+        <Pie
+          data={{
+            labels: THREAT_TYPES,
+            datasets: [
+              {
+                label: " Activity",
+                data: country.threats.comparison,
+                backgroundColor: [
+                  "rgb(255, 99, 132)",
+                  "rgb(54, 162, 235)",
+                  "rgb(255, 205, 86)",
+                  "rgba(75, 192, 192, 1)",
+                ],
+                hoverOffset: 4,
+              },
+            ],
+          }}
+        />
+      </>
+    ),
   };
 
   return (
@@ -41,7 +68,7 @@ const CountryCard = ({ country }: ICountryProps) => {
       title={country.name}
       extra={`${country.emoji} - ${country.code}`}
       style={{
-        width: 288,
+        minWidth: 288,
         boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
       }}
       tabList={TAB_LIST}

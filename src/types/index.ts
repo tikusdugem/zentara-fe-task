@@ -17,6 +17,7 @@ type Threats = {
   level: ThreatLevel;
   timestamps: string;
   descriptions: string;
+  comparison: number[];
 };
 
 type ThreatLevel = (typeof THREAT_LEVEL)[number];
