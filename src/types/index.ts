@@ -10,6 +10,7 @@ export type Country = {
   currency: string;
   capital: string;
   threats: Threats;
+  continent: Continent;
 };
 
 type Threats = {
@@ -18,6 +19,10 @@ type Threats = {
   timestamps: string;
   descriptions: string;
   comparison: number[];
+};
+
+type Continent = {
+  name: string;
 };
 
 type ThreatLevel = (typeof THREAT_LEVEL)[number];

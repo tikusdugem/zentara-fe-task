@@ -1,7 +1,8 @@
 import { type JSX, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import CountryTabInfo from "@/components/CountryTabInfo";
-import { Card, Flex } from "antd";
+import { Button, Card, Divider, Flex } from "antd";
 
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
@@ -16,6 +17,7 @@ interface ICountryProps {
 type ActiveTabKey = "threats" | "general";
 
 const CountryCard = ({ country }: ICountryProps) => {
+  const router = useRouter();
   const [activeTabKey, setActiveTabKey] = useState<ActiveTabKey>("threats");
 
   const cardContents: Record<string, JSX.Element> = {
@@ -63,6 +65,18 @@ const CountryCard = ({ country }: ICountryProps) => {
     ),
   };
 
+  const handleOnClick = () => {
+    const query = {
+      country: country.name,
+      threat: country.threats.type,
+      capital: country.capital,
+      continent: country.continent.name,
+    };
+    const params = new URLSearchParams(query);
+
+    router.push(`/analysis?${params.toString()}`);
+  };
+
   return (
     <Card
       title={country.name}
@@ -77,6 +91,10 @@ const CountryCard = ({ country }: ICountryProps) => {
     >
       <Flex vertical gap="small">
         {cardContents[activeTabKey]}
+        <Divider size="small" />
+        <Button type="primary" onClick={handleOnClick}>
+          Analyze
+        </Button>
       </Flex>
     </Card>
   );

@@ -45,6 +45,9 @@ export default function Home() {
                 phone
                 currency
                 capital
+                continent {
+                  name
+                }
               }
             }
           `,
