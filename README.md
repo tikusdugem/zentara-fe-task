@@ -15,10 +15,10 @@ This project is intended for Technical Assessment, so give me feedback <3
   ```
 - Setup ENV
 
-  Create `.env` file on the root directory, then ask the developer to giving you the list of environment OR for this time, you can just fill the `.env` file with this :D
+  Create `.env` file on the root directory, then ask the developer to giving you the value of environments
 
   ```
-  NEXT_PUBLIC_TREVORBLADES_API_URL=https://countries.trevorblades.com
+  cp .env.example .env
   ```
 
 - Play the Game
@@ -66,3 +66,4 @@ DayJS for date formating. Tiny size, modular & straightforward documentation.
 - API Documentation (proxy API)
 - Video Walkthrough
 - Technical Documentation (RFC)
+- Guard API Proxy
