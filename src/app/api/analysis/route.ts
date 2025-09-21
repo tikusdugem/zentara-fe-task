@@ -11,7 +11,7 @@ const client = new OpenAI({
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { country, threat, capital, continent } = body;
+  const { country, threat, capital, continent, conversation } = body;
 
   const template = `
     Analyze the cybersecurity threat landscape for
@@ -33,7 +33,10 @@ export async function POST(req: NextRequest) {
   try {
     const completion = await client.chat.completions.create({
       model: "meta/llama-3.3-70b-instruct",
-      messages: [{ role: "user", content: template }],
+      messages:
+        conversation?.length >= 1
+          ? conversation
+          : [{ role: "user", content: template }],
       temperature: 0.2,
       top_p: 0.7,
       max_tokens: 1024,
