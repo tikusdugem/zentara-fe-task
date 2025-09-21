@@ -114,7 +114,7 @@ const Analysis = () => {
           <StreamingText text={streamedText} />
 
           <Space direction="vertical" style={{ width: "100%" }}>
-            <ExportButton />
+            <ExportButton conversation={conversation} />
             <ChatInterface
               setQuestion={setQuestion}
               getAnalysis={getAnalysis}
