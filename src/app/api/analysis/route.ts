@@ -37,12 +37,28 @@ export async function POST(req: NextRequest) {
       temperature: 0.2,
       top_p: 0.7,
       max_tokens: 1024,
-      stream: false,
+      stream: true,
     });
 
-    const content = completion.choices[0]?.message?.content;
+    const encoder = new TextEncoder();
+    const readable = new ReadableStream({
+      async start(controller) {
+        try {
+          for await (const chunk of completion) {
+            const delta = chunk.choices[0]?.delta?.content || "";
+            if (delta) controller.enqueue(encoder.encode(delta));
+          }
+        } catch (err) {
+          console.error("Stream error:", err);
+        } finally {
+          controller.close();
+        }
+      },
+    });
 
-    return NextResponse.json({ content });
+    return new Response(readable, {
+      headers: { "Content-Type": "text/plain; charset=utf-8" },
+    });
   } catch (error) {
     console.log(error);
 
