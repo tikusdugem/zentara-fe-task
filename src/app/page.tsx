@@ -104,7 +104,7 @@ export default function Home() {
       <Spin spinning={isLoading} fullscreen />
 
       <Flex justify="center">
-        <div style={{ width: "100%", maxWidth: 1440, padding: 16 }}>
+        <div style={{ width: "100%", maxWidth: 768, padding: 16 }}>
           <Flex vertical gap="middle">
             <Form.Item help="Max 5 Country">
               <Select
