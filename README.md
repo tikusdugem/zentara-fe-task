@@ -58,7 +58,6 @@ DayJS for date formating. Tiny size, modular & straightforward documentation.
 
 - Realtime Threat Level (socket.io)
 - Country Comparison Table
-- Change Fetch with GraphQL Client?
 - Setup Branch: staging, uat, production, feature-branch
 - Changelog (automation)
 - Component Architecture
