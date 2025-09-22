@@ -97,6 +97,10 @@ const Analysis = () => {
       setStreamedText("");
       setQuestion("");
     } catch (error) {
+      if ((error as Error).name === "AbortError") {
+        return console.log("Streaming stopped");
+      }
+
       messageApi.open({
         type: "error",
         content: "Error Get Analysis",
