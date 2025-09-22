@@ -21,6 +21,8 @@ const Analysis = () => {
     { role: string; content: string }[]
   >([]);
   const [question, setQuestion] = useState<string>("");
+  const [controller, setController] = useState<AbortController | null>(null); // ✅ AbortController
+  const [isStreaming, setIsStreaming] = useState<boolean>(false);
 
   const searchParams = useSearchParams();
   const country = searchParams.get("country");
@@ -50,11 +52,16 @@ const Analysis = () => {
       };
     }
 
+    const abortController = new AbortController();
+    setController(abortController);
+    setIsStreaming(true);
+
     try {
       const res = await fetch(`${PROXY_API_URL}/analysis`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
+        signal: abortController.signal,
       });
 
       if (!res.ok) {
@@ -95,6 +102,8 @@ const Analysis = () => {
       });
 
       console.error(error);
+    } finally {
+      setIsStreaming(false);
     }
   };
 
@@ -102,22 +111,43 @@ const Analysis = () => {
     getAnalysis();
   }, []);
 
+  const stopStreaming = () => {
+    if (controller) {
+      controller.abort();
+      setIsStreaming(false);
+    }
+  };
+
   return (
     <>
       {contextHolder}
 
       <Flex justify="center">
-        <div style={{ width: "100%", maxWidth: 768, padding: 16 }}>
+        <div
+          style={{
+            width: "100%",
+            maxWidth: 768,
+            padding: 16,
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "100vh",
+          }}
+        >
           <Title underline>Analysis</Title>
 
           <AnalysisCard conversation={conversation} />
           <StreamingText text={streamedText} />
 
-          <Space direction="vertical" style={{ width: "100%" }}>
+          <Space
+            direction="vertical"
+            style={{ width: "100%", marginTop: "auto" }}
+          >
             <ExportButton conversation={conversation} />
             <ChatInterface
               setQuestion={setQuestion}
               getAnalysis={getAnalysis}
+              isStreaming={isStreaming}
+              stopStreaming={stopStreaming}
             />
           </Space>
         </div>
