@@ -21,7 +21,7 @@ const Analysis = () => {
     { role: string; content: string }[]
   >([]);
   const [question, setQuestion] = useState<string>("");
-  const [controller, setController] = useState<AbortController | null>(null); // ✅ AbortController
+  const [controller, setController] = useState<AbortController | null>(null);
   const [isStreaming, setIsStreaming] = useState<boolean>(false);
 
   const searchParams = useSearchParams();
