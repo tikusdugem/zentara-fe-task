@@ -95,6 +95,7 @@ const Analysis = () => {
         },
       ]);
       setStreamedText("");
+      setQuestion("");
     } catch (error) {
       messageApi.open({
         type: "error",
@@ -142,8 +143,12 @@ const Analysis = () => {
             direction="vertical"
             style={{ width: "100%", marginTop: "auto" }}
           >
-            <ExportButton conversation={conversation} />
+            <ExportButton
+              conversation={conversation}
+              isStreaming={isStreaming}
+            />
             <ChatInterface
+              question={question}
               setQuestion={setQuestion}
               getAnalysis={getAnalysis}
               isStreaming={isStreaming}

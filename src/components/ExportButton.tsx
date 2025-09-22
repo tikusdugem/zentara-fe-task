@@ -3,9 +3,13 @@ import { Button } from "antd";
 
 interface IExportButtonProps {
   conversation: { role: string; content: string }[];
+  isStreaming: boolean;
 }
 
-const ExportButton: FC<IExportButtonProps> = ({ conversation }) => {
+const ExportButton: FC<IExportButtonProps> = ({
+  conversation,
+  isStreaming,
+}) => {
   const handleOnClick = () => {
     const mdContent = conversation
       .map((chat) => `**${chat.role.toUpperCase()}**: ${chat.content}`)
@@ -20,7 +24,11 @@ const ExportButton: FC<IExportButtonProps> = ({ conversation }) => {
     a.click();
   };
 
-  return <Button onClick={handleOnClick}>Export Markdown</Button>;
+  return (
+    <Button disabled={isStreaming} onClick={handleOnClick}>
+      Export Markdown
+    </Button>
+  );
 };
 
 export default ExportButton;

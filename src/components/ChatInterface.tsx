@@ -4,6 +4,7 @@ import { Button, Flex, Input } from "antd";
 const { TextArea } = Input;
 
 interface IChatInterfaceProps {
+  question: string;
   setQuestion: (value: string) => void;
   getAnalysis: () => void;
   isStreaming: boolean;
@@ -11,6 +12,7 @@ interface IChatInterfaceProps {
 }
 
 const ChatInterface: FC<IChatInterfaceProps> = ({
+  question,
   setQuestion,
   getAnalysis,
   isStreaming,
@@ -30,6 +32,8 @@ const ChatInterface: FC<IChatInterfaceProps> = ({
             getAnalysis();
           }
         }}
+        value={question}
+        disabled={isStreaming}
       />
       <Button
         size="large"
