@@ -75,7 +75,7 @@ export default function Home() {
     }));
 
     dispatch(setCountry(mockCountries));
-  }, [data]);
+  }, [data, error]);
 
   return (
     <>
